@@ -1,0 +1,179 @@
+/* SesliOfis v3.9.10.186.8.3 — global popup layer and mobile overflow fix */
+html,
+body {
+    max-width: 100% !important;
+    overflow-x: clip !important;
+}
+
+html.so-modal-lock-v391018683,
+body.so-modal-lock-v391018683 {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+}
+
+.so-modal-ancestor-reset-v391018683 {
+    transform: none !important;
+    -webkit-transform: none !important;
+    filter: none !important;
+    perspective: none !important;
+    contain: none !important;
+    isolation: auto !important;
+    overflow: visible !important;
+    clip-path: none !important;
+    mask: none !important;
+}
+
+.so-modal-root-v391018683 {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) !important;
+    display: grid !important;
+    place-items: center !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    background: rgba(4, 18, 38, .62) !important;
+    z-index: 2147483600 !important;
+}
+
+.so-modal-panel-v391018683 {
+    position: relative !important;
+    width: min(620px, calc(100vw - 24px)) !important;
+    min-width: 0 !important;
+    max-width: 620px !important;
+    max-height: calc(100dvh - max(24px, env(safe-area-inset-top)) - max(24px, env(safe-area-inset-bottom))) !important;
+    margin: 0 auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    box-sizing: border-box !important;
+    border-radius: 16px !important;
+    z-index: 2147483601 !important;
+}
+
+.so-modal-panel-only-v391018683 {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+    width: min(620px, calc(100vw - 24px)) !important;
+    min-width: 0 !important;
+    max-width: 620px !important;
+    max-height: calc(100dvh - max(24px, env(safe-area-inset-top)) - max(24px, env(safe-area-inset-bottom))) !important;
+    margin: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    border-radius: 16px !important;
+    box-shadow: 0 0 0 100vmax rgba(4, 18, 38, .62), 0 22px 60px rgba(4, 18, 38, .28) !important;
+    z-index: 2147483601 !important;
+}
+
+.so-modal-panel-v391018683,
+.so-modal-panel-v391018683 *,
+.so-modal-panel-only-v391018683,
+.so-modal-panel-only-v391018683 * {
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+}
+
+.so-modal-panel-v391018683 form,
+.so-modal-panel-v391018683 fieldset,
+.so-modal-panel-v391018683 input,
+.so-modal-panel-v391018683 select,
+.so-modal-panel-v391018683 textarea,
+.so-modal-panel-v391018683 button,
+.so-modal-panel-v391018683 img,
+.so-modal-panel-only-v391018683 form,
+.so-modal-panel-only-v391018683 fieldset,
+.so-modal-panel-only-v391018683 input,
+.so-modal-panel-only-v391018683 select,
+.so-modal-panel-only-v391018683 textarea,
+.so-modal-panel-only-v391018683 button,
+.so-modal-panel-only-v391018683 img {
+    max-width: 100% !important;
+}
+
+.so-modal-panel-v391018683 input,
+.so-modal-panel-v391018683 select,
+.so-modal-panel-v391018683 textarea,
+.so-modal-panel-only-v391018683 input,
+.so-modal-panel-only-v391018683 select,
+.so-modal-panel-only-v391018683 textarea {
+    width: 100% !important;
+}
+
+.so-modal-panel-v391018683 h1,
+.so-modal-panel-v391018683 h2,
+.so-modal-panel-v391018683 h3,
+.so-modal-panel-v391018683 p,
+.so-modal-panel-v391018683 label,
+.so-modal-panel-v391018683 span,
+.so-modal-panel-v391018683 a,
+.so-modal-panel-v391018683 button,
+.so-modal-panel-v391018683 td,
+.so-modal-panel-v391018683 th,
+.so-modal-panel-only-v391018683 h1,
+.so-modal-panel-only-v391018683 h2,
+.so-modal-panel-only-v391018683 h3,
+.so-modal-panel-only-v391018683 p,
+.so-modal-panel-only-v391018683 label,
+.so-modal-panel-only-v391018683 span,
+.so-modal-panel-only-v391018683 a,
+.so-modal-panel-only-v391018683 button,
+.so-modal-panel-only-v391018683 td,
+.so-modal-panel-only-v391018683 th {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+}
+
+.so-modal-panel-v391018683 [class*="result"],
+.so-modal-panel-v391018683 [class*="list"],
+.so-modal-panel-v391018683 [id*="result"],
+.so-modal-panel-v391018683 [id*="list"],
+.so-modal-panel-only-v391018683 [class*="result"],
+.so-modal-panel-only-v391018683 [class*="list"],
+.so-modal-panel-only-v391018683 [id*="result"],
+.so-modal-panel-only-v391018683 [id*="list"] {
+    max-height: min(42dvh, 360px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+}
+
+.so-modal-panel-v391018683 table,
+.so-modal-panel-only-v391018683 table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+}
+
+.so-modal-panel-v391018683 .row,
+.so-modal-panel-v391018683 [class*="actions"],
+.so-modal-panel-v391018683 [class*="buttons"],
+.so-modal-panel-only-v391018683 .row,
+.so-modal-panel-only-v391018683 [class*="actions"],
+.so-modal-panel-only-v391018683 [class*="buttons"] {
+    max-width: 100% !important;
+    flex-wrap: wrap !important;
+}
+
+@media (max-width: 430px) {
+    .so-modal-root-v391018683 {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .so-modal-panel-v391018683,
+    .so-modal-panel-only-v391018683 {
+        width: calc(100vw - 20px) !important;
+        max-width: calc(100vw - 20px) !important;
+        border-radius: 14px !important;
+    }
+}
