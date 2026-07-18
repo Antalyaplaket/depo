@@ -1,0 +1,70 @@
+name: Inspect live supplier modal
+
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-live-supplier-modal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download canonical live package
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 --retry-delay 2 \
+            'https://app.sesliofis.com/so_v391018681_app_root_cleanup_builder.php?key=sesliofis391018681cleanup&action=download&file=zip' \
+            -o /tmp/live.zip
+          unzip -q /tmp/live.zip -d /tmp/live
+          test -f /tmp/live/product_write.php
+
+      - name: Build modal diagnostics
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostics/live_supplier_modal
+          {
+            echo '# Live supplier modal diagnostics'
+            echo
+            echo "Generated: $(date -u +%FT%TZ)"
+            echo
+            echo '## Relevant files'
+            find /tmp/live -maxdepth 2 -type f \( -iname '*supplier*' -o -iname '*product*' -o -iname '*modal*' \) -printf '%P\n' | sort
+            echo
+            echo '## product_write.php supplier/modal snippets'
+            grep -nEi -C 8 'tedarik|supplier|modal|popup|dialog' /tmp/live/product_write.php || true
+            echo
+            echo '## JavaScript supplier/modal snippets'
+            while IFS= read -r f; do
+              echo
+              echo "### ${f#/tmp/live/}"
+              grep -nEi -C 8 'tedarik|supplier|modal|popup|dialog' "$f" || true
+            done < <(find /tmp/live -maxdepth 2 -type f -name '*.js' | sort)
+            echo
+            echo '## CSS supplier/modal snippets'
+            while IFS= read -r f; do
+              echo
+              echo "### ${f#/tmp/live/}"
+              grep -nEi -C 6 'tedarik|supplier|modal|popup|dialog|z-index|overflow-x' "$f" || true
+            done < <(find /tmp/live -maxdepth 2 -type f -name '*.css' | sort)
+            echo
+            echo '## DOM IDs and classes near supplier text'
+            perl -0777 -ne 'while(/(.{0,500}(?:tedarik|supplier).{0,800})/sig){$x=$1;$x=~s/\r//g;print "$x\n---\n"}' /tmp/live/product_write.php || true
+          } > diagnostics/live_supplier_modal/report.txt
+
+      - name: Commit diagnostics
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add diagnostics/live_supplier_modal/report.txt
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'Inspect live supplier modal markup'
+          git push
