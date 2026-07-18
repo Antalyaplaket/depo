@@ -1,0 +1,54 @@
+name: Build SesliOfis v3.9.10.186.8.3 package
+
+on:
+  push:
+    paths:
+      - 'packages/v391018683/**'
+      - '.github/workflows/build-v391018683.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate sources
+        run: |
+          set -euo pipefail
+          php -l packages/v391018683/so_v391018683_supplier_popup_hard_fix_install.php
+          php -l packages/v391018683/so_v391018683_supplier_popup_hard_fix_rollback.php
+          node --check packages/v391018683/supplier_modal_layer_v391018683.js
+          test -s packages/v391018683/supplier_modal_layer_v391018683.css
+
+      - name: Build root-ready ZIP
+        run: |
+          set -euo pipefail
+          NAME='sesliofis-v3.9.10.186.8.3-app-tedarikci-popup-kesin-fixed-header-mobil-tasma-fix-degisen-dosyalar'
+          rm -rf /tmp/so-stage
+          mkdir -p /tmp/so-stage dist
+          cp packages/v391018683/so_v391018683_supplier_popup_hard_fix_install.php /tmp/so-stage/
+          cp packages/v391018683/so_v391018683_supplier_popup_hard_fix_rollback.php /tmp/so-stage/
+          cp packages/v391018683/supplier_modal_layer_v391018683.css /tmp/so-stage/
+          cp packages/v391018683/supplier_modal_layer_v391018683.js /tmp/so-stage/
+          (
+            cd /tmp/so-stage
+            zip -q -9 -r "$GITHUB_WORKSPACE/dist/${NAME}.zip" .
+          )
+          sha256sum "dist/${NAME}.zip" > "dist/${NAME}.zip.sha256"
+          unzip -l "dist/${NAME}.zip"
+
+      - name: Commit package
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist/
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'Build SesliOfis v3.9.10.186.8.3 package'
+          git push
